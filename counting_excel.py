@@ -56,13 +56,13 @@ def start_counting():
     object_status = [False] * len(object_area_data)
     object_buffer = [None] * len(object_area_data)
 
-    print("Program for counting objects that pass through the line.\nLarge frame size 960x720")
+    frames = []
     while cap.isOpened():
         try:
             video_cur_pos = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000.0
             ret, frame = cap.read()
             if not ret:
-                print("Capture Error")
+                st.error("Capture Error")
                 break
 
             frame_blur = cv2.GaussianBlur(frame.copy(), (5, 5), 3)
@@ -87,8 +87,6 @@ def start_counting():
                             if not status:
                                 qty += 1
                                 total_output += 1
-
-                                print(f"Total objects count: {total_output}")
 
                                 current_time = datetime.now()
                                 diff = current_time - last_time
@@ -129,10 +127,16 @@ def start_counting():
             if config['save_video']:
                 out.write(frame_out)
 
-            cv2.imshow('Frame', frame_out)
+            # Convert frame to bytes for Streamlit
+            _, buffer = cv2.imencode('.jpg', frame_out)
+            frames.append(buffer.tobytes())
+
+            # Display the current frame in Streamlit
+            if frames:
+                st.image(frames[-1], channels="RGB")
 
             # Check for keyboard input to stop counting
-            if cv2.waitKey(1) & 0xFF == ord('q') or st.session_state.stop_counting:
+            if st.session_state.stop_counting:
                 break
 
         except Exception as e:
@@ -141,7 +145,7 @@ def start_counting():
 
     wb.save(path)
     cap.release()
-    cv2.destroyAllWindows()
+    cv2.destroyAllWindows()  # This can be removed if running in non-GUI mode
     return total_output
 
 def main():
