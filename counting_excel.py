@@ -25,9 +25,14 @@ def start_counting():
     ws.append(("datetime", "total_output", "minute", "average ppm", "ct", "ppm"))
 
     # Update the paths for YAML and video output files
-    fn_yaml = os.path.join(os.getcwd(), "count", "area.yml")
-    fn_out = os.path.join(os.getcwd(), "count", "output.avi")
-    
+    fn_yaml = os.path.join(os.path.dirname(__file__), "area.yml")
+    fn_out = os.path.join(os.getcwd(), "output.avi")
+
+    # Check if the YAML file exists
+    if not os.path.isfile(fn_yaml):
+        st.error(f"Configuration file {fn_yaml} not found.")
+        return  # Exit the function if the file is not found
+
     config = {
         'save_video': False,
         'text_overlay': True,
