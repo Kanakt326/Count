@@ -26,12 +26,15 @@ def start_counting():
 
     # Update the paths for YAML and video output files
     fn_yaml = os.path.join(os.path.dirname(__file__), "area.yml")
-    fn_out = os.path.join(os.getcwd(), "output.avi")
+    fn_out = os.path.join(os.getcwd(), "count", "output.avi")
 
     # Check if the YAML file exists
     if not os.path.isfile(fn_yaml):
-        st.error(f"Configuration file {fn_yaml} not found.")
-        return  # Exit the function if the file is not found
+        st.error(f"Configuration file {fn_yaml} not found. Please ensure it exists in the same directory as the script.")
+        return
+
+    with open(fn_yaml, 'r') as stream:
+        object_area_data = yaml.safe_load(stream)
 
     config = {
         'save_video': False,
@@ -49,9 +52,6 @@ def start_counting():
     if config['save_video']:
         fourcc = cv2.VideoWriter_fourcc('D', 'I', 'V', 'X')
         out = cv2.VideoWriter(fn_out, fourcc, 25.0, (640, 480))
-
-    with open(fn_yaml, 'r') as stream:
-        object_area_data = yaml.safe_load(stream)
 
     object_status = [False] * len(object_area_data)
     object_buffer = [None] * len(object_area_data)
