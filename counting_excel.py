@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 from datetime import datetime
 import openpyxl
+import os
 
 def start_counting():
     start_time = datetime.now()
@@ -17,13 +18,16 @@ def start_counting():
     rec_qty = 8
     qty = 0
 
-    path = "C:\\Users\\Priya\\Downloads\\Python Object Counting\\output\\output.xlsx"
+    # Update the path for the Excel output file
+    path = os.path.join(os.getcwd(), "output.xlsx")
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.append(("datetime", "total_output", "minute", "average ppm", "ct", "ppm"))
 
-    fn_yaml = r"C:\\Users\\Priya\\Downloads\\Python Object Counting\\datasets\\area.yml"
-    fn_out = r"C:\\Users\\Priya\\Downloads\\Python Object Counting\\datasets\\output.avi"
+    # Update the paths for YAML and video output files
+    fn_yaml = os.path.join(os.getcwd(), "count", "area.yml")
+    fn_out = os.path.join(os.getcwd(), "count", "output.avi")
+    
     config = {
         'save_video': False,
         'text_overlay': True,
