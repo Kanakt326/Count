@@ -1,0 +1,5 @@
+streamlit==1.24.0
+numpy==1.24.0
+opencv-python==4.7.0.72
+PyYAML==6.0
+openpyxl==3.0.10
