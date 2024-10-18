@@ -1,5 +1,5 @@
 streamlit
 pyyaml
 numpy
-opencv-python
+opencv-python-headless  # Use this instead of opencv-python
 openpyxl
